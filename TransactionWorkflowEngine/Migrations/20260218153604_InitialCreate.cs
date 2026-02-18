@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace TransactionWorkflowEngine.Migrations
 {
     /// <inheritdoc />
@@ -44,7 +46,7 @@ namespace TransactionWorkflowEngine.Migrations
                         column: x => x.CurrentStatusId,
                         principalTable: "TransactionStatuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,13 +67,13 @@ namespace TransactionWorkflowEngine.Migrations
                         column: x => x.FromStatusId,
                         principalTable: "TransactionStatuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_TransactionStatusTransitions_TransactionStatuses_ToStatusId",
                         column: x => x.ToStatusId,
                         principalTable: "TransactionStatuses",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -95,6 +97,30 @@ namespace TransactionWorkflowEngine.Migrations
                         principalTable: "Transactions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "TransactionStatuses",
+                columns: new[] { "Id", "CreatedAt", "IsActive", "Name" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "CREATED" },
+                    { 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "VALIDATED" },
+                    { 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "PROCESSING" },
+                    { 4, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "COMPLETED" },
+                    { 5, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), true, "FAILED" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TransactionStatusTransitions",
+                columns: new[] { "Id", "CreatedAt", "FromStatusId", "ToStatusId" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 1, 2 },
+                    { 2, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 3 },
+                    { 3, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 3, 4 },
+                    { 4, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 2, 5 },
+                    { 5, new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), 5, 2 }
                 });
 
             migrationBuilder.CreateIndex(

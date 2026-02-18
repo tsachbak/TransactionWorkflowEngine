@@ -75,6 +75,43 @@ namespace TransactionWorkflowEngine.Migrations
                         .IsUnique();
 
                     b.ToTable("TransactionStatuses");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Name = "CREATED"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Name = "VALIDATED"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Name = "PROCESSING"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Name = "COMPLETED"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsActive = true,
+                            Name = "FAILED"
+                        });
                 });
 
             modelBuilder.Entity("TransactionWorkflowEngine.Models.TransactionStatusHistory", b =>
@@ -133,6 +170,43 @@ namespace TransactionWorkflowEngine.Migrations
                         .IsUnique();
 
                     b.ToTable("TransactionStatusTransitions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FromStatusId = 1,
+                            ToStatusId = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FromStatusId = 2,
+                            ToStatusId = 3
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FromStatusId = 3,
+                            ToStatusId = 4
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FromStatusId = 2,
+                            ToStatusId = 5
+                        },
+                        new
+                        {
+                            Id = 5,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FromStatusId = 5,
+                            ToStatusId = 2
+                        });
                 });
 
             modelBuilder.Entity("TransactionWorkflowEngine.Models.Transaction", b =>
@@ -140,7 +214,7 @@ namespace TransactionWorkflowEngine.Migrations
                     b.HasOne("TransactionWorkflowEngine.Models.TransactionStatus", "CurrentStatus")
                         .WithMany()
                         .HasForeignKey("CurrentStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CurrentStatus");
@@ -162,13 +236,13 @@ namespace TransactionWorkflowEngine.Migrations
                     b.HasOne("TransactionWorkflowEngine.Models.TransactionStatus", "FromStatus")
                         .WithMany()
                         .HasForeignKey("FromStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("TransactionWorkflowEngine.Models.TransactionStatus", "ToStatus")
                         .WithMany()
                         .HasForeignKey("ToStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("FromStatus");
