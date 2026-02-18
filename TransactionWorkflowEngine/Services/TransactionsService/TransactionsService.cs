@@ -41,8 +41,12 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
             return transaction;
         }
 
-        public async Task UpdateStatusAsync(Transaction transaction, int newStatusId, CancellationToken ct)
+        public async Task UpdateStatusAsync(Guid transactionId, int newStatusId, CancellationToken ct)
         {
+            var transaction = await _db.Transactions.FirstOrDefaultAsync(t => t.Id == transactionId, ct);
+            if (transaction == null)
+                throw new InvalidOperationException($"Transaction with ID '{transactionId}' not found.");
+
             transaction.CurrentStatusId = newStatusId;
             transaction.UpdatedAt = DateTime.UtcNow;
 

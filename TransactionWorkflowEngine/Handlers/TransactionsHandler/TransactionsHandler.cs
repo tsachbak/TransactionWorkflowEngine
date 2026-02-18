@@ -1,4 +1,6 @@
 ﻿using TransactionWorkflowEngine.Dtos;
+using TransactionWorkflowEngine.Models;
+using TransactionWorkflowEngine.Services.HistoryService;
 using TransactionWorkflowEngine.Services.StatusesService;
 using TransactionWorkflowEngine.Services.TransactionsService;
 using TransactionWorkflowEngine.Services.TransitionsService;
@@ -12,12 +14,17 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         private readonly IStatusesService _statusesService;
         private readonly ITransactionsService _transactionsService;
         private readonly ITransitionsService _transitionsService;
+        private readonly IHistoryService _historyService;
 
-        public TransactionsHandler(IStatusesService statusesService, ITransactionsService transactionsService, ITransitionsService transitionsService)
+        public TransactionsHandler(IStatusesService statusesService, 
+                                   ITransactionsService transactionsService, 
+                                   ITransitionsService transitionsService, 
+                                   IHistoryService historyService)
         {
             _statusesService = statusesService;
             _transactionsService = transactionsService;
             _transitionsService = transitionsService;
+            _historyService = historyService;
         }
 
         public async Task<TransactionDto?> GetTransactionByIdAsync(Guid transactionId, CancellationToken ct)
@@ -84,6 +91,25 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
                     })
                     .ToList()
             };
+        }
+
+        public async Task<TransactionDto?> TransitionTransactionAsync(Guid transactionId, int toStatusId, string? reason, CancellationToken ct)
+        {
+            var transaction = await _transactionsService.GetTransactionByIdAsync(transactionId, ct);
+            if (transaction == null) 
+                return null;
+
+            var fromStatusId = transaction.CurrentStatusId;
+
+            var isTransitionAllowed = await _transitionsService.IsTransitionAllowedAsync(fromStatusId, toStatusId, ct);
+            if (!isTransitionAllowed)
+                throw new InvalidOperationException($"Transition from status '{fromStatusId}' to status with ID '{toStatusId}' is not allowed.");
+
+            await _transactionsService.UpdateStatusAsync(transactionId, toStatusId, ct);
+
+            await _historyService.AddAsync(transactionId, fromStatusId, toStatusId, reason, ct);
+
+            return await GetTransactionByIdAsync(transactionId, ct);
         }
     }
 }

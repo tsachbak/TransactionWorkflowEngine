@@ -24,5 +24,10 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         /// <param name="ct"></param>
         /// <returns></returns>
         Task<AvailableTransitionsDto?> GetAvailableTransitionsAsync(Guid transactionId, CancellationToken ct);
+
+        /// <summary>
+        /// Transitions the specified transaction to a new status asynchronously.
+        /// </summary>
+        Task<TransactionDto?> TransitionTransactionAsync(Guid transactionId, int toStatusId, string? reason, CancellationToken ct);
     }
 }

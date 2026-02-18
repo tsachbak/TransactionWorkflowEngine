@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TransactionWorkflowEngine.Data;
 using TransactionWorkflowEngine.Handlers.TransactionsHandler;
+using TransactionWorkflowEngine.Services.HistoryService;
 using TransactionWorkflowEngine.Services.StatusesService;
 using TransactionWorkflowEngine.Services.TransactionsService;
 using TransactionWorkflowEngine.Services.TransitionsService;
@@ -29,6 +30,7 @@ namespace TransactionWorkflowEngine
             builder.Services.AddScoped<IStatusesService, StatusesService>();
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
             builder.Services.AddScoped<ITransitionsService, TransitionsService>();
+            builder.Services.AddScoped<IHistoryService, HistoryService>();
 
             var app = builder.Build();
 

@@ -51,5 +51,23 @@ namespace TransactionWorkflowEngine.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost("{id:guid}/transition")]
+        public async Task<IActionResult> Transition(Guid id, TransitionRequestDto request, CancellationToken ct)
+        {
+            try
+            {
+                var result = await _transactionsHandler.TransitionTransactionAsync(id, request.ToStatusId, request.Reason, ct);
+                if (result is null)
+                {
+                    return NotFound();
+                }
+                return Ok(result);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
     }
 }

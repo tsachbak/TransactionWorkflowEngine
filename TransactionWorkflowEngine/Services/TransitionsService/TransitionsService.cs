@@ -23,5 +23,12 @@ namespace TransactionWorkflowEngine.Services.TransitionsService
 
             return allowedNextStatuses;
         }
+
+        public Task<bool> IsTransitionAllowedAsync(int fromStatusId, int toStatusId, CancellationToken ct)
+        {
+            return _db.TransactionStatusTransitions
+                .AsNoTracking()
+                .AnyAsync(t => t.FromStatusId == fromStatusId && t.ToStatusId == toStatusId, ct);
+        }
     }
 }
