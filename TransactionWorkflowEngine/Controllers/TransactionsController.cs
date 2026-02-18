@@ -5,7 +5,7 @@ using TransactionWorkflowEngine.Handlers.TransactionsHandler;
 
 namespace TransactionWorkflowEngine.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("transactions")]
     [ApiController]
     public class TransactionsController : ControllerBase
     {
@@ -38,7 +38,7 @@ namespace TransactionWorkflowEngine.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
-        [HttpGet("{id:guid}/available-transitions")]
+        [HttpGet("{id:guid}/available-transition")]
         [ProducesResponseType(typeof(AvailableTransitionsDto), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAvailableTransitions(Guid id, CancellationToken ct)
