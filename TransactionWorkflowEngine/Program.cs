@@ -1,6 +1,9 @@
 
 using Microsoft.EntityFrameworkCore;
 using TransactionWorkflowEngine.Data;
+using TransactionWorkflowEngine.Handlers.TransactionsHandler;
+using TransactionWorkflowEngine.Services.StatusesService;
+using TransactionWorkflowEngine.Services.TransactionsService;
 
 namespace TransactionWorkflowEngine
 {
@@ -19,6 +22,11 @@ namespace TransactionWorkflowEngine
             // Configure Entity Framework Core with SQL Server
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
+
+            // Register application services
+            builder.Services.AddScoped<ITransactionsHandler, TransactionsHandler>();
+            builder.Services.AddScoped<IStatusesService, StatusesService>();
+            builder.Services.AddScoped<ITransactionsService, TransactionsService>();
 
             var app = builder.Build();
 
