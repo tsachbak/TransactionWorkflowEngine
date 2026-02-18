@@ -21,5 +21,10 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
         /// update the status of an existing transaction.
         /// </summary>
         Task UpdateStatusAsync(Guid transactionId, int newStatusId, CancellationToken ct);
+
+        /// <summary>
+        /// Updates transaction status and writes history in a single atomic save operation.
+        /// </summary>
+        Task UpdateStatusWithHistoryAsync(Transaction transaction, int toStatusId, string? reason, CancellationToken ct);
     }
 }

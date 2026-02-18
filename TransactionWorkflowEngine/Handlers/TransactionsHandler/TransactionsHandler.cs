@@ -105,9 +105,7 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
             if (!isTransitionAllowed)
                 throw new InvalidOperationException($"Transition from status '{fromStatusId}' to status with ID '{toStatusId}' is not allowed.");
 
-            await _transactionsService.UpdateStatusAsync(transactionId, toStatusId, ct);
-
-            await _historyService.AddAsync(transactionId, fromStatusId, toStatusId, reason, ct);
+            await _transactionsService.UpdateStatusWithHistoryAsync(transaction, toStatusId, reason, ct);
 
             return await GetTransactionByIdAsync(transactionId, ct);
         }

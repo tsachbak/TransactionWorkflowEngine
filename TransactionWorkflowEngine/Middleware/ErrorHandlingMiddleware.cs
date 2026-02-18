@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using Microsoft.EntityFrameworkCore;
 using TransactionWorkflowEngine.Dtos;
 
 namespace TransactionWorkflowEngine.Middleware
@@ -40,6 +41,7 @@ namespace TransactionWorkflowEngine.Middleware
         {
             return ex switch
             {
+                DbUpdateConcurrencyException => ((int)HttpStatusCode.Conflict, "Conflict"),
                 InvalidOperationException => ((int)HttpStatusCode.BadRequest, "Bad Request"),
                 KeyNotFoundException => ((int)HttpStatusCode.NotFound, "Not Found"),
                 _ => ((int)HttpStatusCode.InternalServerError, "Internal Server Error")

@@ -52,5 +52,24 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
 
             await _db.SaveChangesAsync(ct);
         }
+
+        public async Task UpdateStatusWithHistoryAsync(Transaction transaction, int toStatusId, string? reason, CancellationToken ct)
+        {
+            var fromStatusId = transaction.CurrentStatusId;
+
+            transaction.CurrentStatusId = toStatusId;
+            transaction.UpdatedAt = DateTime.UtcNow;
+
+            _db.TransactionStatusHistories.Add(new TransactionStatusHistory
+            {
+                TransactionId = transaction.Id,
+                FromStatusId = fromStatusId,
+                ToStatusId = toStatusId,
+                ChangedAt = DateTime.UtcNow,
+                Reason = reason
+            });
+
+            await _db.SaveChangesAsync(ct);
+        }
     }
 }
