@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using TransactionWorkflowEngine.Data;
 using TransactionWorkflowEngine.Handlers.TransactionsHandler;
+using TransactionWorkflowEngine.Middleware;
 using TransactionWorkflowEngine.Services.HistoryService;
 using TransactionWorkflowEngine.Services.StatusesService;
 using TransactionWorkflowEngine.Services.TransactionsService;
@@ -40,6 +41,8 @@ namespace TransactionWorkflowEngine
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();
 
