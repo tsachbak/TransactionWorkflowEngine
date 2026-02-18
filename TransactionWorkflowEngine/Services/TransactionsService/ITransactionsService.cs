@@ -7,8 +7,14 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
     /// </summary>
     public interface ITransactionsService
     {
-
+        /// <summary>
+        /// Get a transaction by its unique identifier.
+        /// </summary>
         Task<Transaction?> GetTransactionByIdAsync(Guid transactionId, CancellationToken ct);
+
+        /// <summary>
+        /// Create a new transaction with the specified initial status.
+        /// </summary>
         Task<Transaction> CreateTransactionAsync(int initialStatusId, CancellationToken ct);
     }
 }

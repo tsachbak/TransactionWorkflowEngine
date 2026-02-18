@@ -37,5 +37,19 @@ namespace TransactionWorkflowEngine.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
+
+        [HttpGet("{id:guid}/available-transitions")]
+        [ProducesResponseType(typeof(AvailableTransitionsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAvailableTransitions(Guid id, CancellationToken ct)
+        {
+            var result = await _transactionsHandler.GetAvailableTransitionsAsync(id, ct);
+            if (result is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }

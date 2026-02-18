@@ -4,6 +4,7 @@ using TransactionWorkflowEngine.Data;
 using TransactionWorkflowEngine.Handlers.TransactionsHandler;
 using TransactionWorkflowEngine.Services.StatusesService;
 using TransactionWorkflowEngine.Services.TransactionsService;
+using TransactionWorkflowEngine.Services.TransitionsService;
 
 namespace TransactionWorkflowEngine
 {
@@ -27,6 +28,7 @@ namespace TransactionWorkflowEngine
             builder.Services.AddScoped<ITransactionsHandler, TransactionsHandler>();
             builder.Services.AddScoped<IStatusesService, StatusesService>();
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
+            builder.Services.AddScoped<ITransitionsService, TransitionsService>();
 
             var app = builder.Build();
 

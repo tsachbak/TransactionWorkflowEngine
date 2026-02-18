@@ -16,5 +16,13 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         /// Creates a new transaction and return the created transaction details.
         /// </summary>
         Task<TransactionDto> CreateTransactionAsync(CancellationToken ct);
+
+        /// <summary>
+        /// Gets the available transitions for a given transaction.
+        /// </summary>
+        /// <param name="transactionId"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        Task<AvailableTransitionsDto?> GetAvailableTransitionsAsync(Guid transactionId, CancellationToken ct);
     }
 }
