@@ -40,5 +40,13 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
 
             return transaction;
         }
+
+        public async Task UpdateStatusAsync(Transaction transaction, int newStatusId, CancellationToken ct)
+        {
+            transaction.CurrentStatusId = newStatusId;
+            transaction.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync(ct);
+        }
     }
 }

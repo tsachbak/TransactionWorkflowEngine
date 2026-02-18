@@ -16,5 +16,10 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
         /// Create a new transaction with the specified initial status.
         /// </summary>
         Task<Transaction> CreateTransactionAsync(int initialStatusId, CancellationToken ct);
+
+        /// <summary>
+        /// update the status of an existing transaction.
+        /// </summary>
+        Task UpdateStatusAsync(Transaction transaction, int newStatusId, CancellationToken ct);
     }
 }
