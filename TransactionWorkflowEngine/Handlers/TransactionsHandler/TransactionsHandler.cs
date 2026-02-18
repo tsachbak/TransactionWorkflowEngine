@@ -16,9 +16,9 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         private readonly ITransitionsService _transitionsService;
         private readonly IHistoryService _historyService;
 
-        public TransactionsHandler(IStatusesService statusesService, 
-                                   ITransactionsService transactionsService, 
-                                   ITransitionsService transitionsService, 
+        public TransactionsHandler(IStatusesService statusesService,
+                                   ITransactionsService transactionsService,
+                                   ITransitionsService transitionsService,
                                    IHistoryService historyService)
         {
             _statusesService = statusesService;
@@ -96,7 +96,7 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         public async Task<TransactionDto?> TransitionTransactionAsync(Guid transactionId, int toStatusId, string? reason, CancellationToken ct)
         {
             var transaction = await _transactionsService.GetTransactionByIdAsync(transactionId, ct);
-            if (transaction == null) 
+            if (transaction == null)
                 return null;
 
             var fromStatusId = transaction.CurrentStatusId;
@@ -110,6 +110,21 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
             await _historyService.AddAsync(transactionId, fromStatusId, toStatusId, reason, ct);
 
             return await GetTransactionByIdAsync(transactionId, ct);
+        }
+
+        public async Task<TransactionHistoryDto?> GetTransactionHistoryAsync(Guid transactionId, CancellationToken ct)
+        {
+            var transaction = await _transactionsService.GetTransactionByIdAsync(transactionId, ct);
+            if (transaction == null)
+                return null;
+
+            var historyItems = await _historyService.GetHistoryByTransactionIdAsync(transactionId, ct);
+
+            return new TransactionHistoryDto
+            {
+                TransactionId = transaction.Id,
+                Items = historyItems
+            };
         }
     }
 }

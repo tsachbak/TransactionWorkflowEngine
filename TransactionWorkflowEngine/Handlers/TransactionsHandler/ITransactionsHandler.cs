@@ -29,5 +29,10 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
         /// Transitions the specified transaction to a new status asynchronously.
         /// </summary>
         Task<TransactionDto?> TransitionTransactionAsync(Guid transactionId, int toStatusId, string? reason, CancellationToken ct);
+
+        /// <summary>
+        /// Get the transaction history for a given transaction, including all status changes and timestamps.
+        /// </summary>
+        Task<TransactionHistoryDto?> GetTransactionHistoryAsync(Guid transactionId, CancellationToken ct);
     }
 }

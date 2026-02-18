@@ -62,5 +62,19 @@ namespace TransactionWorkflowEngine.Controllers
             }
             return Ok(result);
         }
+
+        [HttpGet("{id:guid}/history")]
+        [ProducesResponseType(typeof(TransactionHistoryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetTransactionHistory(Guid id, CancellationToken ct)
+        {
+            var result = await _transactionsHandler.GetTransactionHistoryAsync(id, ct);
+            if (result is null)
+            {
+                return NotFound();
+            }
+
+            return Ok(result);
+        }
     }
 }
