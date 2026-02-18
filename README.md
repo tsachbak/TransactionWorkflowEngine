@@ -89,7 +89,9 @@ This starts SQL Server on `localhost:1433` with credentials from `docker-compose
 From repo root:
 
 ```bash
-dotnet ef database update --project TransactionWorkflowEngine/TransactionWorkflowEngine.csproj
+cd TransactionWorkflowEngine
+dotnet restore
+dotnet ef database update
 ```
 
 If `dotnet ef` is missing:
@@ -100,6 +102,8 @@ dotnet tool install --global dotnet-ef
 
 ### 4) Run the API
 
+From repo root:
+
 ```bash
 dotnet run --project TransactionWorkflowEngine/TransactionWorkflowEngine.csproj
 ```
@@ -108,6 +112,8 @@ dotnet run --project TransactionWorkflowEngine/TransactionWorkflowEngine.csproj
 
 - `https://localhost:7135/swagger`
 - or `http://localhost:5140/swagger`
+
+If Swagger is not available on your machine at `https://localhost:7135/swagger`, use `http://localhost:5140/swagger`.
 
 (Exact URLs come from `Properties/launchSettings.json`.)
 
