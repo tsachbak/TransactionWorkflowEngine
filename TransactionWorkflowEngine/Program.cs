@@ -16,17 +16,14 @@ namespace TransactionWorkflowEngine
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            // Configure Entity Framework Core with SQL Server
+            // Configure EF Core with SQL Server connection from configuration.
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer")));
 
-            // Register application services
+            // Register workflow layers (handler + services).
             builder.Services.AddScoped<ITransactionsHandler, TransactionsHandler>();
             builder.Services.AddScoped<IStatusesService, StatusesService>();
             builder.Services.AddScoped<ITransactionsService, TransactionsService>();
@@ -35,13 +32,13 @@ namespace TransactionWorkflowEngine
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
 
+            // Keep centralized error mapping early in the pipeline.
             app.UseMiddleware<ErrorHandlingMiddleware>();
 
             app.UseHttpsRedirection();

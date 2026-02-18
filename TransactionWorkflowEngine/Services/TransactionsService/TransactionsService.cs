@@ -57,9 +57,11 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
         {
             var fromStatusId = transaction.CurrentStatusId;
 
+            // Update current state on the tracked entity.
             transaction.CurrentStatusId = toStatusId;
             transaction.UpdatedAt = DateTime.UtcNow;
 
+            // Add the corresponding audit trail entry in the same DbContext unit of work.
             _db.TransactionStatusHistories.Add(new TransactionStatusHistory
             {
                 TransactionId = transaction.Id,
@@ -69,6 +71,7 @@ namespace TransactionWorkflowEngine.Services.TransactionsService
                 Reason = reason
             });
 
+            // A single SaveChanges call keeps status and history atomic.
             await _db.SaveChangesAsync(ct);
         }
     }

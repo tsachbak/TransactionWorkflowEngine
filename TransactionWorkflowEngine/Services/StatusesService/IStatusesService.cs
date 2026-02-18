@@ -3,10 +3,16 @@
 namespace TransactionWorkflowEngine.Services.StatusesService
 {
     /// <summary>
-    /// Statuses Service Contract: Defines the operations related to transaction statuses, such as retrieving status information by name.
+    /// Provides read operations for workflow statuses.
     /// </summary>
     public interface IStatusesService
     {
+        /// <summary>
+        /// Gets a status by name.
+        /// </summary>
+        /// <param name="name">Status name.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>The status when found; otherwise null.</returns>
         Task<TransactionStatus?> GetStatusByNameAsync(string name, CancellationToken ct);
     }
 }

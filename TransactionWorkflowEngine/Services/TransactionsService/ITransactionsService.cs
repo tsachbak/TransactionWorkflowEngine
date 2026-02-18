@@ -3,28 +3,41 @@
 namespace TransactionWorkflowEngine.Services.TransactionsService
 {
     /// <summary>
-    /// Transactions Service Contract: Defines the operations related to transactions, such as creating new transactions with an initial status.
+    /// Provides transaction persistence operations used by the workflow layer.
     /// </summary>
     public interface ITransactionsService
     {
         /// <summary>
-        /// Get a transaction by its unique identifier.
+        /// Gets a transaction by its unique identifier.
         /// </summary>
+        /// <param name="transactionId">Transaction identifier.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>The transaction when found; otherwise null.</returns>
         Task<Transaction?> GetTransactionByIdAsync(Guid transactionId, CancellationToken ct);
 
         /// <summary>
-        /// Create a new transaction with the specified initial status.
+        /// Creates a new transaction with the specified initial status.
         /// </summary>
+        /// <param name="initialStatusId">Initial status identifier.</param>
+        /// <param name="ct">Cancellation token.</param>
+        /// <returns>The created transaction entity.</returns>
         Task<Transaction> CreateTransactionAsync(int initialStatusId, CancellationToken ct);
 
         /// <summary>
-        /// update the status of an existing transaction.
+        /// Updates the current status of an existing transaction.
         /// </summary>
+        /// <param name="transactionId">Transaction identifier.</param>
+        /// <param name="newStatusId">Target status identifier.</param>
+        /// <param name="ct">Cancellation token.</param>
         Task UpdateStatusAsync(Guid transactionId, int newStatusId, CancellationToken ct);
 
         /// <summary>
-        /// Updates transaction status and writes history in a single atomic save operation.
+        /// Updates status and writes a history entry in one atomic persistence operation.
         /// </summary>
+        /// <param name="transaction">Tracked transaction entity to update.</param>
+        /// <param name="toStatusId">Target status identifier.</param>
+        /// <param name="reason">Optional business reason for the status change.</param>
+        /// <param name="ct">Cancellation token.</param>
         Task UpdateStatusWithHistoryAsync(Transaction transaction, int toStatusId, string? reason, CancellationToken ct);
     }
 }

@@ -4,6 +4,9 @@ using TransactionWorkflowEngine.Dtos;
 
 namespace TransactionWorkflowEngine.Middleware
 {
+    /// <summary>
+    /// Converts unhandled exceptions into consistent API error responses.
+    /// </summary>
     public class ErrorHandlingMiddleware
     {
         private readonly RequestDelegate _next;
@@ -39,6 +42,7 @@ namespace TransactionWorkflowEngine.Middleware
 
         private static (int StatusCode, string Title) MapException(Exception ex)
         {
+            // Keep domain and persistence exceptions mapped to explicit HTTP semantics.
             return ex switch
             {
                 DbUpdateConcurrencyException => ((int)HttpStatusCode.Conflict, "Conflict"),

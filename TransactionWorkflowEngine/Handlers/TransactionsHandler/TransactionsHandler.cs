@@ -101,10 +101,12 @@ namespace TransactionWorkflowEngine.Handlers.TransactionsHandler
 
             var fromStatusId = transaction.CurrentStatusId;
 
+            // Validate requested transition against dynamic workflow configuration.
             var isTransitionAllowed = await _transitionsService.IsTransitionAllowedAsync(fromStatusId, toStatusId, ct);
             if (!isTransitionAllowed)
                 throw new InvalidOperationException($"Transition from status '{fromStatusId}' to status with ID '{toStatusId}' is not allowed.");
 
+            // Persist status update and history together to avoid partial workflow state.
             await _transactionsService.UpdateStatusWithHistoryAsync(transaction, toStatusId, reason, ct);
 
             return await GetTransactionByIdAsync(transactionId, ct);
